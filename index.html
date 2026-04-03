@@ -7,20 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* 모바일 탭 스크롤 개선 */
+        .tab-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .tab-scroll-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
         
         .tab-content { display: none; }
         .tab-content.active { 
             display: block; 
-            animation: slideUpFade 0.5s ease-out forwards; 
+            animation: slideUpFade 0.4s ease-out forwards; 
         }
 
         .schedule-view { display: none; }
         .schedule-view.active { display: block; animation: fadeIn 0.3s ease-out forwards; }
 
         @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(16px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -29,12 +39,17 @@
             to { opacity: 1; }
         }
 
-        /* lucide icon size helpers */
         .icon-sm { width: 14px; height: 14px; }
         .icon-md { width: 16px; height: 16px; }
         .icon-lg { width: 20px; height: 20px; }
         .icon-xl { width: 24px; height: 24px; }
         .icon-2xl { width: 28px; height: 28px; }
+        
+        /* 간트차트 패턴 */
+        .bg-stripes {
+            background-image: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+        }
     </style>
 </head>
 <body class="bg-[#F8FAFC] font-sans text-slate-800 pb-20">
@@ -55,309 +70,281 @@
     <main class="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
         
         <!-- Hero Banner -->
-        <div class="relative bg-gradient-to-br from-indigo-600 to-blue-700 rounded-2xl p-6 md:p-8 overflow-hidden shadow-lg border border-indigo-500">
+        <div class="relative bg-gradient-to-br from-slate-900 to-indigo-900 rounded-2xl p-6 md:p-8 overflow-hidden shadow-xl border border-indigo-900">
             <div class="relative z-10">
                 <div class="flex items-center gap-2 mb-3">
                     <span class="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full animate-pulse">
-                        긴급 공지
+                        긴급 마감 안내
                     </span>
-                    <span class="text-indigo-100 text-sm font-medium">운영부서 일정 가이드</span>
+                    <span class="text-slate-300 text-sm font-medium">운영부서 마감일 포커스 가이드</span>
                 </div>
                 <h2 class="text-white text-2xl md:text-3xl font-bold mb-4 leading-tight">
-                    2026 글로벌·국내 어워드 통합 마스터 일정표
+                    공모전은 마감일이 생명입니다.<br class="hidden md:block" /> 타지부(부산/대전) 및 아시아디자인프라이즈 추가!
                 </h2>
-                <p class="text-indigo-100 text-sm md:text-base mb-6 max-w-2xl leading-relaxed">
-                    선택과 집중이 필요한 시기입니다. 각 공모전별 접수 및 마감 기간을 한눈에 파악하고, 본인의 프로젝트 완성도에 맞춰 출품 일정을 전략적으로 세우시기 바랍니다. <br>
-                    <strong class="text-yellow-300 font-bold">(🚨 현재 레드닷 B&C 마감이 21일 남았습니다. 캘린더를 확인하세요!)</strong>
-                </p>
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-4 rounded-xl mb-6">
+                    <ul class="text-indigo-100 text-sm md:text-base space-y-2">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="alert-circle" class="icon-md shrink-0 mt-0.5 text-yellow-400"></i>
+                            <span><strong>IDEA 2026:</strong> 1차 지원 이미 <strong class="text-red-300">종료</strong>. 2차 진출팀만 실물 발송 준비(5.4 마감)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="alert-circle" class="icon-md shrink-0 mt-0.5 text-yellow-400"></i>
+                            <span><strong>iF Student:</strong> 2026년 올해 초 지원 <strong class="text-red-300">종료</strong>. 지금부터 2027년도 어워드(내년 2월 마감) 선제적 준비 돌입!</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="icon-md shrink-0 mt-0.5 text-emerald-400"></i>
+                            <span><strong>신규 추가:</strong> 아시아디자인프라이즈, 지역 전람회(대전, 부산) 일정이 포함되었습니다.</span>
+                        </li>
+                    </ul>
+                </div>
                 <div class="flex flex-wrap gap-2 md:gap-3">
-                    <span class="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded-full text-sm font-medium backdrop-blur-md">
-                        <i data-lucide="clock" class="icon-md text-yellow-400"></i>
-                        얼리버드(조기접수) 기한 엄수
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded-full text-sm font-medium backdrop-blur-md">
-                        <i data-lucide="calendar-check" class="icon-md text-emerald-300"></i>
-                        마감일 기준 1주일 전 업로드 완료 권장
+                    <span class="inline-flex items-center gap-1.5 bg-white/20 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                        <i data-lucide="clock" class="icon-md text-emerald-300"></i>
+                        모든 일정은 '마감일' 기준으로 재정비
                     </span>
                 </div>
             </div>
-            <i data-lucide="calendar" class="absolute -right-10 -bottom-10 w-72 h-72 text-indigo-400 opacity-20 transform rotate-12"></i>
+            <i data-lucide="calendar-off" class="absolute -right-10 -bottom-10 w-72 h-72 text-indigo-400 opacity-10 transform rotate-12"></i>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="bg-white p-1.5 rounded-xl flex overflow-x-auto hide-scrollbar shadow-sm border border-slate-200 sticky top-[72px] z-40 gap-1">
-            <button onclick="switchTab('tab-schedule')" data-tab="tab-schedule" class="tab-btn flex-1 min-w-[100px] text-center py-3 px-2 rounded-lg text-sm md:text-base font-bold transition-all duration-200 whitespace-nowrap bg-slate-900 text-white shadow-md">
-                통합 일정표
-            </button>
-            <button onclick="switchTab('tab-reddot')" data-tab="tab-reddot" class="tab-btn flex-1 min-w-[100px] text-center py-3 px-2 rounded-lg text-sm md:text-base font-bold transition-all duration-200 whitespace-nowrap text-slate-500 hover:text-slate-800 hover:bg-slate-100">
-                Red Dot
-            </button>
-            <button onclick="switchTab('tab-idea')" data-tab="tab-idea" class="tab-btn flex-1 min-w-[100px] text-center py-3 px-2 rounded-lg text-sm md:text-base font-bold transition-all duration-200 whitespace-nowrap text-slate-500 hover:text-slate-800 hover:bg-slate-100">
-                IDEA
-            </button>
-            <button onclick="switchTab('tab-spark')" data-tab="tab-spark" class="tab-btn flex-1 min-w-[100px] text-center py-3 px-2 rounded-lg text-sm md:text-base font-bold transition-all duration-200 whitespace-nowrap text-slate-500 hover:text-slate-800 hover:bg-slate-100">
-                Spark
-            </button>
-            <button onclick="switchTab('tab-if')" data-tab="tab-if" class="tab-btn flex-1 min-w-[100px] text-center py-3 px-2 rounded-lg text-sm md:text-base font-bold transition-all duration-200 whitespace-nowrap text-slate-500 hover:text-slate-800 hover:bg-slate-100">
-                iF Student
-            </button>
-            <button onclick="switchTab('tab-national')" data-tab="tab-national" class="tab-btn flex-1 min-w-[110px] text-center py-3 px-2 rounded-lg text-sm md:text-base font-bold transition-all duration-200 whitespace-nowrap text-slate-500 hover:text-slate-800 hover:bg-slate-100">
-                대한민국전람회
-            </button>
-            <button onclick="switchTab('tab-gangwon')" data-tab="tab-gangwon" class="tab-btn flex-1 min-w-[110px] text-center py-3 px-2 rounded-lg text-sm md:text-base font-bold transition-all duration-200 whitespace-nowrap text-slate-500 hover:text-slate-800 hover:bg-slate-100">
-                강원전람회
-            </button>
+        <!-- Navigation Tabs (Mobile Scroll Fix) -->
+        <div class="relative">
+            <!-- Scroll hint gradient for mobile -->
+            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none md:hidden rounded-r-xl"></div>
+            
+            <div class="bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm sticky top-[72px] z-40">
+                <div class="tab-scroll-container gap-1 snap-x">
+                    <button onclick="switchTab('tab-schedule')" data-tab="tab-schedule" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 bg-slate-900 text-white shadow-md">
+                        전체 일정표
+                    </button>
+                    <button onclick="switchTab('tab-reddot')" data-tab="tab-reddot" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100">
+                        Red Dot
+                    </button>
+                    <button onclick="switchTab('tab-idea')" data-tab="tab-idea" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100">
+                        IDEA
+                    </button>
+                    <button onclick="switchTab('tab-spark')" data-tab="tab-spark" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100">
+                        Spark
+                    </button>
+                    <button onclick="switchTab('tab-if')" data-tab="tab-if" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100">
+                        iF Student
+                    </button>
+                    <button onclick="switchTab('tab-asia')" data-tab="tab-asia" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100">
+                        Asia Design
+                    </button>
+                    <button onclick="switchTab('tab-korea')" data-tab="tab-korea" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100">
+                        대한민국전람회
+                    </button>
+                    <button onclick="switchTab('tab-regional')" data-tab="tab-regional" class="tab-btn snap-start shrink-0 px-4 py-3 rounded-lg text-sm md:text-base font-bold transition-all duration-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100">
+                        지역전람회(타지부)
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Tab Content Area -->
-        <div class="min-h-[500px]">
+        <div class="min-h-[600px]">
             
             <!-- ==============================
-                 Tab 1: 통합 일정표 (Schedule Focus)
+                 Tab 1: 통합 일정표 (접수/심사/발표 세분화)
                  ============================== -->
             <div id="tab-schedule" class="tab-content active space-y-8">
                 
-                <!-- Annual Overview (Gantt style) -->
-                <section class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm overflow-x-auto">
-                    <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
-                        <i data-lucide="bar-chart-horizontal" class="icon-xl text-indigo-600"></i>
-                        <h3 class="text-xl font-bold text-slate-900">연간 공모전 흐름도 (Overview)</h3>
+                <!-- Advanced Gantt Chart Overview -->
+                <section class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm overflow-x-auto hide-scrollbar">
+                    <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4 min-w-[800px]">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="bar-chart-2" class="icon-xl text-indigo-600"></i>
+                            <h3 class="text-xl font-bold text-slate-900">2026 공모전 핵심 진행 흐름도</h3>
+                        </div>
+                        <div class="flex gap-4 text-xs font-bold">
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-blue-500"></span> 접수마감</div>
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-purple-500 bg-stripes"></span> 심사기간</div>
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-500"></span> 최종발표</div>
+                        </div>
                     </div>
-                    <div class="min-w-[700px]">
-                        <!-- Headers -->
-                        <div class="flex text-xs font-bold text-slate-400 mb-2 border-b border-slate-100 pb-2">
-                            <div class="w-24 shrink-0">어워드</div>
-                            <div class="flex-1 grid grid-cols-4 gap-2 text-center">
-                                <div>2025 4/4분기<br>(10~12월)</div>
-                                <div>2026 1/4분기<br>(1~3월)</div>
-                                <div>2026 2/4분기<br>(4~6월)</div>
-                                <div>2026 3/4분기<br>(7~9월)</div>
+                    
+                    <div class="min-w-[900px]">
+                        <!-- Months Header -->
+                        <div class="flex text-xs font-bold text-slate-400 mb-4 border-b border-slate-100 pb-2">
+                            <div class="w-36 shrink-0">어워드 구분</div>
+                            <div class="flex-1 grid grid-cols-12 gap-1 text-center">
+                                <div>1월</div><div>2월</div><div>3월</div><div>4월</div><div>5월</div><div>6월</div>
+                                <div>7월</div><div>8월</div><div>9월</div><div>10월</div><div>11월</div><div>12월</div>
                             </div>
                         </div>
-                        <!-- Rows -->
-                        <div class="space-y-4 text-sm">
+                        
+                        <!-- Timeline Rows -->
+                        <div class="space-y-4 text-sm mt-2">
                             <div class="flex items-center">
-                                <div class="w-24 shrink-0 font-bold text-red-600">Red Dot (PD)</div>
-                                <div class="flex-1 grid grid-cols-4 gap-2 relative h-6 bg-slate-50 rounded">
-                                    <div class="absolute left-0 top-0 h-full bg-red-400 rounded opacity-80 flex items-center px-2 text-white text-xs" style="width: 35%;">접수(~1.16)</div>
+                                <div class="w-36 shrink-0 font-bold text-slate-700">IDEA 2026</div>
+                                <div class="flex-1 grid grid-cols-12 gap-1 relative h-8 bg-slate-50 rounded items-center">
+                                    <!-- 1차 마감(3.11) -->
+                                    <div class="absolute left-[0%] h-full bg-slate-300 rounded opacity-50 flex items-center px-2 text-slate-700 text-xs font-bold whitespace-nowrap" style="width: 25%;">1차 종료</div>
+                                    <!-- 2차 패널제출 마감(5.4) -->
+                                    <div class="absolute left-[33%] h-full bg-blue-500 rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 5%;">2차</div>
+                                    <!-- 심사(5월말) -->
+                                    <div class="absolute left-[39%] h-full bg-purple-500 bg-stripes rounded opacity-80" style="width: 7%;"></div>
+                                    <!-- 발표(6.8) -->
+                                    <div class="absolute left-[47%] h-full bg-emerald-500 rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 5%;">발표</div>
                                 </div>
                             </div>
+
                             <div class="flex items-center">
-                                <div class="w-24 shrink-0 font-bold text-red-500">Red Dot (B&C)</div>
-                                <div class="flex-1 grid grid-cols-4 gap-2 relative h-6 bg-slate-50 rounded">
-                                    <div class="absolute left-[25%] top-0 h-full bg-red-400 rounded opacity-80 flex items-center px-2 text-white text-xs" style="width: 35%;">접수(1.26~5.8)</div>
+                                <div class="w-36 shrink-0 font-bold text-slate-700">Red Dot (B&C)</div>
+                                <div class="flex-1 grid grid-cols-12 gap-1 relative h-8 bg-slate-50 rounded items-center">
+                                    <!-- 일반접수 마감(4.24), 지각접수 마감(5.8) -->
+                                    <div class="absolute left-[0%] h-full bg-blue-400 rounded opacity-90 flex items-center justify-end px-2 text-white text-xs font-bold whitespace-nowrap" style="width: 32%;">일반(4.24)</div>
+                                    <div class="absolute left-[33%] h-full bg-blue-600 rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 6%;">최종</div>
+                                    <!-- 심사(6월) -->
+                                    <div class="absolute left-[40%] h-full bg-purple-500 bg-stripes rounded opacity-80" style="width: 8%;"></div>
+                                    <!-- 발표(7월) -->
+                                    <div class="absolute left-[49%] h-full bg-emerald-500 rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 5%;">발표</div>
                                 </div>
                             </div>
+
                             <div class="flex items-center">
-                                <div class="w-24 shrink-0 font-bold text-blue-600">IDEA</div>
-                                <div class="flex-1 grid grid-cols-4 gap-2 relative h-6 bg-slate-50 rounded">
-                                    <div class="absolute left-[25%] top-0 h-full bg-blue-400 rounded opacity-80 flex items-center justify-center text-white text-xs" style="width: 20%;">1차(~3.11)</div>
-                                    <div class="absolute left-[46%] top-0 h-full bg-blue-600 rounded opacity-90 flex items-center justify-center text-white text-xs" style="width: 10%;">2차(~5.4)</div>
+                                <div class="w-36 shrink-0 font-bold text-slate-700">Spark (학생)</div>
+                                <div class="flex-1 grid grid-cols-12 gap-1 relative h-8 bg-slate-50 rounded items-center">
+                                    <!-- 학생부 최종마감(6.28) -->
+                                    <div class="absolute left-[15%] h-full bg-blue-500 rounded flex items-center justify-end px-2 text-white text-xs font-bold z-20 whitespace-nowrap shadow-sm" style="width: 34%;">최종마감(6.28)</div>
+                                    <!-- 심사(7월) -->
+                                    <div class="absolute left-[50%] h-full bg-purple-500 bg-stripes rounded opacity-80" style="width: 8%;"></div>
+                                    <!-- 발표(8월) -->
+                                    <div class="absolute left-[59%] h-full bg-emerald-500 rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 5%;">발표</div>
                                 </div>
                             </div>
+
                             <div class="flex items-center">
-                                <div class="w-24 shrink-0 font-bold text-emerald-600">iF Student</div>
-                                <div class="flex-1 grid grid-cols-4 gap-2 relative h-6 bg-slate-50 rounded">
-                                    <div class="absolute left-[15%] top-0 h-full bg-emerald-500 rounded opacity-90 flex items-center px-2 text-white text-xs" style="width: 12%;">접수(~1.28)</div>
+                                <div class="w-36 shrink-0 font-bold text-slate-700">대한민국전람회</div>
+                                <div class="flex-1 grid grid-cols-12 gap-1 relative h-8 bg-slate-50 rounded items-center">
+                                    <!-- 1차 마감(6.30) -->
+                                    <div class="absolute left-[33%] h-full bg-blue-500 rounded flex items-center justify-end px-2 text-white text-xs font-bold z-20 whitespace-nowrap shadow-sm" style="width: 17%;">1차(6.30)</div>
+                                    <!-- 2차 현물제출(8월초) -->
+                                    <div class="absolute left-[58%] h-full bg-blue-600 rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 6%;">2차마감</div>
+                                    <!-- 3차 PT(9.15) -->
+                                    <div class="absolute left-[70%] h-full bg-purple-500 bg-stripes rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 6%;">3차PT</div>
+                                    <!-- 발표(10.7) -->
+                                    <div class="absolute left-[77%] h-full bg-emerald-500 rounded flex items-center justify-center text-white text-[11px] font-bold z-20 whitespace-nowrap shadow-sm" style="width: 5%;">발표</div>
                                 </div>
                             </div>
+
                             <div class="flex items-center">
-                                <div class="w-24 shrink-0 font-bold text-orange-500">Spark</div>
-                                <div class="flex-1 grid grid-cols-4 gap-2 relative h-6 bg-slate-50 rounded">
-                                    <div class="absolute left-[30%] top-0 h-full bg-orange-400 rounded opacity-80 flex items-center px-2 text-white text-xs" style="width: 40%;">학생(~6.28) / 일반(~11.16)</div>
+                                <div class="w-36 shrink-0 font-bold text-slate-700">타지부 전람회</div>
+                                <div class="flex-1 grid grid-cols-12 gap-1 relative h-8 bg-slate-50 rounded items-center">
+                                    <!-- 대전/강원/부산 마감 러시 (8~10월) -->
+                                    <div class="absolute left-[58%] h-full bg-blue-500 rounded flex items-center justify-center text-white text-xs font-bold z-20 whitespace-nowrap shadow-sm" style="width: 25%;">지역 접수 러시(8~10월)</div>
+                                    <!-- 지역 심사 및 발표(10~11월) -->
+                                    <div class="absolute left-[84%] h-full bg-emerald-500 rounded flex items-center justify-center text-white text-xs font-bold z-20 whitespace-nowrap shadow-sm" style="width: 8%;">순차발표</div>
                                 </div>
                             </div>
+                            
                             <div class="flex items-center">
-                                <div class="w-24 shrink-0 font-bold text-slate-800">국내 전람회</div>
-                                <div class="flex-1 grid grid-cols-4 gap-2 relative h-6 bg-slate-50 rounded">
-                                    <div class="absolute left-[55%] top-0 h-full bg-slate-700 rounded opacity-90 flex items-center px-2 text-white text-xs" style="width: 45%;">대디전 1~3차(~9.17) / 강디전(~10월)</div>
+                                <div class="w-36 shrink-0 font-bold text-slate-700">iF Student (27년)</div>
+                                <div class="flex-1 grid grid-cols-12 gap-1 relative h-8 bg-slate-50 rounded items-center">
+                                    <!-- 내년도 접수 시작(10월~) -->
+                                    <div class="absolute left-[75%] h-full bg-blue-300 rounded flex items-center justify-start px-2 text-slate-800 text-xs font-bold z-20 whitespace-nowrap shadow-sm" style="width: 25%;">2027년도 접수 오픈</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Monthly Detailed Schedule -->
+                <!-- Detailed Deadline Focus View -->
                 <section>
                     <!-- Toggle Controls -->
                     <div class="flex justify-between items-end mb-6 border-b border-slate-200 pb-4">
                         <div class="flex items-center gap-2">
-                            <i data-lucide="calendar-days" class="icon-xl text-indigo-600"></i>
-                            <h3 class="text-xl font-bold text-slate-900">월별 세부 마감일정</h3>
+                            <i data-lucide="bell-ring" class="icon-xl text-red-500"></i>
+                            <h3 class="text-xl font-bold text-slate-900">마감일(Deadline) 리스트 & 캘린더</h3>
                         </div>
                         <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-                            <button onclick="toggleScheduleView('list')" id="btn-view-list" class="flex items-center gap-1.5 px-4 py-1.5 text-sm font-bold rounded-md bg-white text-slate-800 shadow-sm transition-all">
+                            <button onclick="toggleScheduleView('list')" id="btn-view-list" class="flex items-center gap-1.5 px-4 py-1.5 text-sm font-bold rounded-md bg-white text-slate-800 shadow-sm transition-all whitespace-nowrap">
                                 <i data-lucide="list" class="icon-sm"></i> 리스트형
                             </button>
-                            <button onclick="toggleScheduleView('calendar')" id="btn-view-cal" class="flex items-center gap-1.5 px-4 py-1.5 text-sm font-bold rounded-md text-slate-500 hover:text-slate-800 transition-all">
+                            <button onclick="toggleScheduleView('calendar')" id="btn-view-cal" class="flex items-center gap-1.5 px-4 py-1.5 text-sm font-bold rounded-md text-slate-500 hover:text-slate-800 transition-all whitespace-nowrap">
                                 <i data-lucide="grid-3x3" class="icon-sm"></i> 달력형(월별)
                             </button>
                         </div>
                     </div>
 
-                    <!-- View 1: List View -->
+                    <!-- View 1: List View (Deadline Focused) -->
                     <div id="view-list" class="schedule-view active">
-                        <div class="relative border-l-2 border-indigo-100 ml-4 space-y-10 pb-4">
+                        <div class="space-y-8">
                             
-                            <!-- 2025. 10 -->
-                            <div class="relative pl-6">
+                            <!-- Closed Info -->
+                            <div class="bg-slate-100 border border-slate-200 p-4 rounded-xl flex items-start gap-3">
+                                <i data-lucide="info" class="icon-lg text-slate-500 shrink-0 mt-0.5"></i>
+                                <div>
+                                    <p class="font-bold text-slate-700">이미 종료된 주요 마감 (2026년 상반기)</p>
+                                    <p class="text-sm text-slate-500 mt-1">iF Student 최종 마감 (1.28), IDEA 1차 마감 (3.11), Spark 춘계 학생부 얼리버드 마감 (3.31)</p>
+                                </div>
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="relative pl-6 border-l-2 border-indigo-200">
                                 <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-indigo-500 ring-4 ring-[#F8FAFC]"></div>
-                                <h4 class="font-bold text-xl text-slate-900 mb-4">2025년 10~12월</h4>
+                                <h4 class="font-bold text-xl text-slate-900 mb-4">현재 다가오는 마감 (4월 ~ 6월)</h4>
                                 <ul class="space-y-3">
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-red-600 bg-red-50 py-1 rounded">10. 10</div>
+                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-red-200 shadow-sm">
+                                        <div class="w-[85px] shrink-0 text-center text-sm font-bold text-red-600 bg-red-50 border border-red-100 py-1.5 rounded">마감: 04. 24</div>
                                         <div>
-                                            <p class="font-bold text-slate-900">레드닷 디자인 어워드 (제품디자인)</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">얼리버드(Early Bird) 접수 마감</p>
+                                            <p class="font-bold text-slate-900 flex items-center gap-2">Red Dot B&C (일반 접수) <span class="bg-red-100 text-red-600 text-[10px] px-1.5 py-0.5 rounded">임박</span></p>
+                                            <p class="text-sm text-slate-600 mt-0.5">가장 중요한 1차 마감. 이후에는 Latecomer 비용 부과.</p>
                                         </div>
                                     </li>
                                     <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-red-600 bg-red-50 py-1 rounded">11. 19</div>
+                                        <div class="w-[85px] shrink-0 text-center text-sm font-bold text-blue-600 bg-blue-50 py-1.5 rounded">마감: 05. 04</div>
                                         <div>
-                                            <p class="font-bold text-slate-900 flex items-center gap-2">레드닷 Young Professionals Day <span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded">무료</span></p>
-                                            <p class="text-sm text-slate-600 mt-0.5">단 24시간 동안 진행. 학생/졸업 5년 이내 대상 50명 추첨 신청</p>
+                                            <p class="font-bold text-slate-900">IDEA 2026 (2차 실물접수)</p>
+                                            <p class="text-sm text-slate-600 mt-0.5">1차 합격자에 한해 헨리 포드 박물관으로 실물/패널 제출.</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                        <div class="w-[85px] shrink-0 text-center text-sm font-bold text-red-600 bg-red-50 py-1.5 rounded">마감: 05. 08</div>
+                                        <div>
+                                            <p class="font-bold text-slate-900">Red Dot B&C (지각 접수)</p>
+                                            <p class="text-sm text-red-500 font-medium mt-0.5">Latecomer 최종 마감. 이후 접수 절대 불가.</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                        <div class="w-[85px] shrink-0 text-center text-sm font-bold text-slate-600 bg-slate-100 py-1.5 rounded">마감: 06. 30</div>
+                                        <div>
+                                            <p class="font-bold text-slate-900">대한민국 디자인 전람회 (1차 온라인)</p>
+                                            <p class="text-sm text-slate-600 mt-0.5">이미지 5장, 국/영문 설명 최종 업로드 마감.</p>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
 
-                            <!-- 2026. 1 -->
-                            <div class="relative pl-6">
+                            <!-- Q3 -->
+                            <div class="relative pl-6 border-l-2 border-indigo-200">
                                 <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-indigo-500 ring-4 ring-[#F8FAFC]"></div>
-                                <h4 class="font-bold text-xl text-slate-900 mb-4">2026년 1월 <span class="text-sm font-normal text-red-500 ml-2">※ 접수 집중 기간</span></h4>
+                                <h4 class="font-bold text-xl text-slate-900 mb-4">하반기 지역 공모전 마감 (8월 ~ 10월) <span class="text-sm font-normal text-slate-500 ml-2">※ 작년 기준 예측일</span></h4>
                                 <ul class="space-y-3">
                                     <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-blue-600 bg-blue-50 py-1 rounded">01. 05</div>
+                                        <div class="w-[85px] shrink-0 text-center text-sm font-bold text-purple-600 bg-purple-50 py-1.5 rounded">마감: 8월 말</div>
                                         <div>
-                                            <p class="font-bold text-slate-900">IDEA 2026</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">Round 1 (Regular) 1차 온라인 접수 시작</p>
+                                            <p class="font-bold text-slate-900">강원디자인전람회 (1차 온라인)</p>
+                                            <p class="text-sm text-slate-600 mt-0.5">작년 기준 8월 29일경 마감. 출품료 무료 다작 권장.</p>
                                         </div>
                                     </li>
                                     <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-red-600 bg-red-50 py-1 rounded">01. 16</div>
+                                        <div class="w-[85px] shrink-0 text-center text-sm font-bold text-pink-600 bg-pink-50 py-1.5 rounded">마감: 10월 초</div>
                                         <div>
-                                            <p class="font-bold text-slate-900">레드닷 디자인 어워드 (제품디자인)</p>
-                                            <p class="text-sm text-red-500 font-medium mt-0.5">최종 접수 마감 (Latecomer 종료)</p>
+                                            <p class="font-bold text-slate-900">대전디자인공모전 / 부산산업디자인전</p>
+                                            <p class="text-sm text-slate-600 mt-0.5">작년 기준 9월말~10월초 마감. 강원/대한민국 탈락작 재도전.</p>
                                         </div>
                                     </li>
                                     <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-red-600 bg-red-50 py-1 rounded">01. 26</div>
+                                        <div class="w-[85px] shrink-0 text-center text-sm font-bold text-emerald-600 bg-emerald-50 py-1.5 rounded">마감: 10월 말</div>
                                         <div>
-                                            <p class="font-bold text-slate-900">레드닷 디자인 어워드 (브랜드&커뮤니케이션)</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">얼리버드(Early Bird) 접수 시작</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-emerald-50 p-4 rounded-xl border border-emerald-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-emerald-700 bg-emerald-100 py-1 rounded">01. 28</div>
-                                        <div>
-                                            <p class="font-bold text-emerald-900 flex items-center gap-2">iF STUDENT AWARD <span class="bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded">무료</span></p>
-                                            <p class="text-sm text-emerald-700 font-bold mt-0.5">최종 접수 마감일 (PDF 포스터 필수)</p>
+                                            <p class="font-bold text-slate-900">Asia Design Prize (얼리버드)</p>
+                                            <p class="text-sm text-slate-600 mt-0.5">아시아권 최고 권위. 2027년도 어워드 얼리버드 마감.</p>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
-
-                            <!-- 2026. 2~3 -->
-                            <div class="relative pl-6">
-                                <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-indigo-500 ring-4 ring-[#F8FAFC]"></div>
-                                <h4 class="font-bold text-xl text-slate-900 mb-4">2026년 2월 ~ 3월</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-blue-600 bg-blue-50 py-1 rounded">02. 13</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">IDEA / 레드닷 (B&C) 공통</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">IDEA Round 1 일반 접수 마감 / 레드닷 B&C 얼리버드 마감</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-orange-500 bg-orange-50 py-1 rounded">02. 26</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">Spark Design Awards</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">학생/일반 부문 접수 오픈 (임시 파일 선결제 전략 시작)</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-blue-600 bg-blue-50 py-1 rounded">03. 11</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">IDEA 2026</p>
-                                            <p class="text-sm text-red-500 font-medium mt-0.5">Round 1 (Late) 최종 마감 (비용 2배 증가 구간)</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- 2026. 4~6 -->
-                            <div class="relative pl-6">
-                                <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-indigo-500 ring-4 ring-[#F8FAFC]"></div>
-                                <h4 class="font-bold text-xl text-slate-900 mb-4">2026년 4월 ~ 6월</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-blue-600 bg-blue-50 py-1 rounded">05. 04</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">IDEA 2026 (Round 2)</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">1차 합격자 대상 추가 자료/실물 패널 제출 마감</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-red-600 bg-red-50 py-1 rounded">05. 08</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">레드닷 디자인 어워드 (브랜드&커뮤니케이션)</p>
-                                            <p class="text-sm text-red-500 font-medium mt-0.5">최종 마감 (Latecomer 종료)</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-slate-800 bg-white border border-blue-200 py-1 rounded">05~06월</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">대한민국 디자인 전람회</p>
-                                            <p class="text-sm text-blue-700 font-medium mt-0.5">1차 온라인 접수 기간 (5.1 ~ 6.30)</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-orange-500 bg-orange-50 py-1 rounded">06. 28</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">Spark Design Awards (학생부)</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">춘계 학생부 최종 마감일 (이 날까지 완성본 업데이트 필수)</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- 2026. 하반기 -->
-                            <div class="relative pl-6">
-                                <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-slate-400 ring-4 ring-[#F8FAFC]"></div>
-                                <h4 class="font-bold text-xl text-slate-900 mb-4">2026년 하반기 (7월 ~ 12월)</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-slate-600 bg-slate-100 py-1 rounded">8월 초</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">대한민국 / 강원 디자인 전람회</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">1차 합격자 오프라인 패널/실물 제출 및 강디전 온라인 접수</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-slate-600 bg-slate-100 py-1 rounded">9. 15</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">대한민국 디자인 전람회 3차 PT</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">동상 이상 후보자 대상 10분 공개 피칭 심사 (9.15~9.17)</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-orange-500 bg-orange-50 py-1 rounded">11. 16</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">Spark Design Awards (일반부)</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">현업 실무자 부문 최종 마감일</p>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-start gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                                        <div class="w-16 shrink-0 text-center text-sm font-bold text-slate-600 bg-slate-100 py-1 rounded">11월 말</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900">국내 전람회 최종 전시 및 시상</p>
-                                            <p class="text-sm text-slate-600 mt-0.5">디자인코리아 2026 연계 전시회 참여</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-
                         </div>
                     </div>
 
@@ -365,138 +352,94 @@
                     <div id="view-calendar" class="schedule-view">
                         <!-- Legend -->
                         <div class="flex flex-wrap gap-2 mb-4 px-2">
-                            <span class="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded"><span class="w-2 h-2 rounded-full bg-red-500"></span> Red Dot</span>
-                            <span class="inline-flex items-center gap-1 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded"><span class="w-2 h-2 rounded-full bg-blue-500"></span> IDEA</span>
-                            <span class="inline-flex items-center gap-1 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded"><span class="w-2 h-2 rounded-full bg-orange-500"></span> Spark</span>
-                            <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> iF Student</span>
-                            <span class="inline-flex items-center gap-1 text-xs font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded"><span class="w-2 h-2 rounded-full bg-slate-600"></span> 국내 전람회</span>
+                            <span class="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 border border-red-100 px-2 py-1 rounded whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-red-500"></span> Red Dot</span>
+                            <span class="inline-flex items-center gap-1 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-2 py-1 rounded whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-blue-500"></span> IDEA</span>
+                            <span class="inline-flex items-center gap-1 text-xs font-bold text-orange-600 bg-orange-50 border border-orange-100 px-2 py-1 rounded whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-orange-500"></span> Spark</span>
+                            <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Asia / iF</span>
+                            <span class="inline-flex items-center gap-1 text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-1 rounded whitespace-nowrap"><span class="w-2 h-2 rounded-full bg-slate-600"></span> 국내/타지부</span>
                         </div>
 
                         <!-- Calendar Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             
-                            <!-- Q4 2025 -->
-                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
-                                <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">25년 10월</h4>
-                                <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r">
-                                        <span class="font-bold text-red-700">10일</span> 레드닷 PD 얼리버드 마감
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
-                                <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">25년 11월</h4>
-                                <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r">
-                                        <span class="font-bold text-red-700">19일</span> 레드닷 영 프로페셔널(무료)
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm opacity-60 h-full flex flex-col items-center justify-center text-slate-400">
-                                <span class="font-bold">25년 12월</span>
-                                <span class="text-xs">주요 마감 없음</span>
-                            </div>
-
-                            <!-- Q1 2026 -->
-                            <div class="bg-white border-2 border-indigo-100 rounded-xl p-4 shadow-md h-full relative">
-                                <div class="absolute -top-3 -right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow">집중 구간</div>
-                                <h4 class="font-bold text-lg text-indigo-900 border-b border-indigo-100 pb-2 mb-3">26년 1월</h4>
-                                <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-blue-500 bg-blue-50/50 rounded-r">
-                                        <span class="font-bold text-blue-700">5일</span> IDEA 1차 오픈
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r">
-                                        <span class="font-bold text-red-700">16일</span> 레드닷 PD 최종 마감
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r">
-                                        <span class="font-bold text-red-700">26일</span> 레드닷 B&C 얼리버드 시작
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-emerald-500 bg-emerald-50/50 rounded-r shadow-sm">
-                                        <span class="font-bold text-emerald-700">28일</span> iF Student 최종 마감
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
-                                <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">26년 2월</h4>
-                                <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r">
-                                        <span class="font-bold text-red-700">13일</span> 레드닷 B&C 얼리버드 마감
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-blue-500 bg-blue-50/50 rounded-r">
-                                        <span class="font-bold text-blue-700">13일</span> IDEA 1차 일반 마감
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-orange-500 bg-orange-50/50 rounded-r">
-                                        <span class="font-bold text-orange-700">26일</span> Spark 전 부문 오픈
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
-                                <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">26년 3월</h4>
-                                <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-blue-500 bg-blue-50/50 rounded-r">
-                                        <span class="font-bold text-blue-700">11일</span> IDEA 1차 (Late) 마감
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-orange-500 bg-orange-50/50 rounded-r">
-                                        <span class="font-bold text-orange-700">31일</span> Spark 학생부 얼리버드 마감
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Q2 2026 -->
-                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
+                            <!-- 26년 4월 -->
+                            <div class="bg-white border-2 border-red-100 rounded-xl p-4 shadow-sm relative h-full">
+                                <div class="absolute -top-3 -right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow">임박</div>
                                 <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">26년 4월</h4>
                                 <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-blue-500 bg-blue-50/50 rounded-r">
-                                        <span class="font-bold text-blue-700">17일</span> IDEA 2차 실물접수 오픈
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r">
-                                        <span class="font-bold text-red-700">24일</span> 레드닷 B&C 일반 마감
+                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r flex justify-between">
+                                        <span>Red Dot B&C 일반</span>
+                                        <strong class="text-red-700 whitespace-nowrap">마감 24일</strong>
                                     </div>
                                 </div>
                             </div>
 
+                            <!-- 26년 5월 -->
                             <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
                                 <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">26년 5월</h4>
                                 <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-slate-500 bg-slate-50/80 rounded-r">
-                                        <span class="font-bold text-slate-700">1일</span> 대한민국 전람회 접수 시작
+                                    <div class="text-xs p-1.5 border-l-2 border-blue-500 bg-blue-50/50 rounded-r flex justify-between">
+                                        <span>IDEA 2차 제출</span>
+                                        <strong class="text-blue-700 whitespace-nowrap">마감 4일</strong>
                                     </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-blue-500 bg-blue-50/50 rounded-r">
-                                        <span class="font-bold text-blue-700">4일</span> IDEA 2차 실물 마감
+                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r flex justify-between">
+                                        <span>Red Dot B&C 지각</span>
+                                        <strong class="text-red-700 whitespace-nowrap">최종 8일</strong>
                                     </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-red-500 bg-red-50/50 rounded-r">
-                                        <span class="font-bold text-red-700">8일</span> 레드닷 B&C 최종 마감
-                                    </div>
+                                    <div class="text-[10px] text-slate-400 mt-2 text-center pt-2 border-t border-dashed">대한민국 전람회 접수 진행 중</div>
                                 </div>
                             </div>
 
+                            <!-- 26년 6월 -->
                             <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
                                 <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">26년 6월</h4>
                                 <div class="space-y-2">
-                                    <div class="text-xs p-1.5 border-l-2 border-orange-500 bg-orange-50/50 rounded-r">
-                                        <span class="font-bold text-orange-700">7일</span> Spark 학생(일반)/프로(얼리)
+                                    <div class="text-xs p-1.5 border-l-2 border-orange-500 bg-orange-50/50 rounded-r flex justify-between">
+                                        <span>Spark 학생부</span>
+                                        <strong class="text-orange-700 whitespace-nowrap">마감 28일</strong>
                                     </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-orange-500 bg-orange-50/50 rounded-r">
-                                        <span class="font-bold text-orange-700">28일</span> Spark 학생부 최종 마감
-                                    </div>
-                                    <div class="text-xs p-1.5 border-l-2 border-slate-500 bg-slate-50/80 rounded-r">
-                                        <span class="font-bold text-slate-700">30일</span> 대한민국 전람회 1차 마감
+                                    <div class="text-xs p-1.5 border-l-2 border-slate-500 bg-slate-50/80 rounded-r flex justify-between">
+                                        <span>대한민국전람회 1차</span>
+                                        <strong class="text-slate-700 whitespace-nowrap">마감 30일</strong>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Q3/Q4 Combined visual -->
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm col-span-1 md:col-span-2 lg:col-span-3">
-                                <h4 class="font-bold text-lg text-slate-900 border-b border-slate-200 pb-2 mb-3">26년 하반기 (7~12월 주요 심사/시상)</h4>
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                    <div class="text-xs p-2 bg-white rounded border border-slate-100"><strong class="block text-red-600">7월 7일</strong> 레드닷 시상식(에센)</div>
-                                    <div class="text-xs p-2 bg-white rounded border border-slate-100"><strong class="block text-slate-700">8월 초~말</strong> 강디전 1차 / 대디전 2차 제출</div>
-                                    <div class="text-xs p-2 bg-white rounded border border-slate-100"><strong class="block text-slate-700">9월 15~17일</strong> 대한민국 전람회 3차 PT</div>
-                                    <div class="text-xs p-2 bg-white rounded border border-slate-100"><strong class="block text-orange-600">11월 16일</strong> Spark 일반부 최종 마감</div>
-                                    <div class="text-xs p-2 bg-white rounded border border-slate-100"><strong class="block text-slate-700">11월 말</strong> 디자인코리아 전시/시상</div>
+                            <!-- 26년 8월 -->
+                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
+                                <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">26년 8월 (타지부 시작)</h4>
+                                <div class="space-y-2">
+                                    <div class="text-xs p-1.5 border-l-2 border-slate-500 bg-slate-50/80 rounded-r flex justify-between">
+                                        <span>대디전 2차 현물제출</span>
+                                        <strong class="text-slate-700 whitespace-nowrap">마감 초</strong>
+                                    </div>
+                                    <div class="text-xs p-1.5 border-l-2 border-purple-500 bg-purple-50/50 rounded-r flex justify-between">
+                                        <span>강원디자인전람회 1차</span>
+                                        <strong class="text-purple-700 whitespace-nowrap">마감 말</strong>
+                                    </div>
                                 </div>
+                            </div>
+
+                            <!-- 26년 9~10월 -->
+                            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all h-full">
+                                <h4 class="font-bold text-lg text-slate-900 border-b border-slate-100 pb-2 mb-3">26년 9~10월</h4>
+                                <div class="space-y-2">
+                                    <div class="text-xs p-1.5 border-l-2 border-pink-500 bg-pink-50/50 rounded-r flex justify-between">
+                                        <span>대전/부산 전람회 1차</span>
+                                        <strong class="text-pink-700 whitespace-nowrap">마감 초</strong>
+                                    </div>
+                                    <div class="text-xs p-1.5 border-l-2 border-emerald-500 bg-emerald-50/50 rounded-r flex justify-between">
+                                        <span>Asia Design 얼리버드</span>
+                                        <strong class="text-emerald-700 whitespace-nowrap">마감 10월말</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 26년 11~12월 -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm h-full flex flex-col justify-center items-center text-center">
+                                <i data-lucide="award" class="icon-xl text-slate-300 mb-2"></i>
+                                <h4 class="font-bold text-sm text-slate-600">11월 ~ 12월은 시상 시즌</h4>
+                                <p class="text-xs text-slate-500 mt-1">디자인코리아 전시 및<br>각 어워드 갈라 파티 참석</p>
                             </div>
 
                         </div>
@@ -505,7 +448,7 @@
             </div>
 
             <!-- ==============================
-                 Tab 2: Red Dot (유지)
+                 Tab 2: Red Dot
                  ============================== -->
             <div id="tab-reddot" class="tab-content space-y-8">
                 <div class="mb-6 flex items-start gap-4">
@@ -551,40 +494,10 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center gap-2">
-                        <i data-lucide="briefcase" class="icon-md text-slate-500"></i>
-                        <h4 class="font-bold text-slate-800">브랜드 & 커뮤니케이션 (B&C 2026) 세부 일정</h4>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left text-slate-600">
-                            <thead class="bg-slate-50/50 border-b border-slate-100">
-                                <tr>
-                                    <th class="px-6 py-3 font-medium text-slate-500">단계</th>
-                                    <th class="px-6 py-3 font-medium text-slate-500">기간</th>
-                                    <th class="px-6 py-3 font-medium text-slate-500">비용</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <tr class="bg-red-50/30">
-                                    <td class="px-6 py-4 text-red-700 font-bold">Early Bird</td>
-                                    <td class="px-6 py-4 font-bold text-red-700">26. 01. 26 ~ 02. 13</td>
-                                    <td class="px-6 py-4 text-red-700 font-bold">250유로</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium text-red-500">Latecomer</td>
-                                    <td class="px-6 py-4 text-red-500">26. 04. 25 ~ 05. 08</td>
-                                    <td class="px-6 py-4 text-red-500">470유로</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
 
             <!-- ==============================
-                 Tab 3: IDEA (유지)
+                 Tab 3: IDEA
                  ============================== -->
             <div id="tab-idea" class="tab-content space-y-8">
                 <div class="mb-6 flex items-start gap-4">
@@ -600,72 +513,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                         <h4 class="font-bold text-blue-700 flex items-center gap-2 mb-4 text-lg">
-                            <i data-lucide="check-circle-2" class="icon-lg"></i> 무조건 '데이터/혜택' 위주 서술!
+                            <i data-lucide="check-circle-2" class="icon-lg"></i> 26년 1차 마감 완료
                         </h4>
+                        <p class="text-sm text-red-500 mb-4 font-bold border-b pb-3">2026년도 1차 접수는 이미 마감되었습니다.</p>
                         <ul class="space-y-4 text-sm text-slate-700">
                             <li class="flex items-start gap-2">
                                 <div class="bg-blue-50 p-1 mt-0.5 rounded text-blue-600"><i data-lucide="chevron-right" class="icon-sm"></i></div>
-                                <div><strong class="text-slate-900">사용자 혜택 (Benefit to User):</strong> 얼마나 더 편해지고 절약됐는가?</div>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <div class="bg-blue-50 p-1 mt-0.5 rounded text-blue-600"><i data-lucide="chevron-right" class="icon-sm"></i></div>
-                                <div><strong class="text-slate-900">기업/사회적 혜택:</strong> 시장 경쟁력과 환경 보호 기여도(수치화 필수)</div>
+                                <div><strong class="text-slate-900">2차 패널 접수 (5.4 마감):</strong> 1차 합격자에 한하여 미국으로 실물/패널 배송</div>
                             </li>
                         </ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                        <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-4 text-lg">
-                            <i data-lucide="target" class="icon-lg text-slate-500"></i> 주의해야 할 규격
-                        </h4>
-                        <ul class="space-y-4 text-sm text-slate-600">
-                            <li class="flex justify-between items-center border-b border-slate-100 pb-3">
-                                <span class="text-slate-500">이미지 수량</span> 
-                                <strong class="text-slate-900 bg-slate-100 px-2 py-1 rounded">최대 5장까지만 가능</strong>
-                            </li>
-                            <li class="flex items-start gap-2 pt-2 text-red-600">
-                                <i data-lucide="alert-triangle" class="icon-md shrink-0 mt-0.5"></i>
-                                <span><strong>절대 주의:</strong> 이름, 학교 마크 넣으면 블라인드 위반으로 즉시 탈락!</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="clock" class="icon-md text-slate-500"></i>
-                            <h4 class="font-bold text-slate-800">Two-Round 심사 세부 일정</h4>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left text-slate-600">
-                            <thead class="bg-slate-50/50 border-b border-slate-100">
-                                <tr>
-                                    <th class="px-6 py-3 font-medium text-slate-500">단계</th>
-                                    <th class="px-6 py-3 font-medium text-slate-500">기간</th>
-                                    <th class="px-6 py-3 font-medium text-slate-500">내용</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">1차 (Regular)</td>
-                                    <td class="px-6 py-4">26. 01. 05 ~ 02. 13</td>
-                                    <td class="px-6 py-4 text-slate-500">온라인 블라인드 ($150)</td>
-                                </tr>
-                                <tr class="bg-blue-50/40">
-                                    <td class="px-6 py-4 text-blue-800 font-bold">2차 실물 접수</td>
-                                    <td class="px-6 py-4 font-bold text-blue-800">26. 04. 17 ~ 05. 04</td>
-                                    <td class="px-6 py-4 font-medium text-slate-800">1차 합격자 한정 실물 배송</td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
 
             <!-- ==============================
-                 Tab 4: Spark (유지)
+                 Tab 4: Spark
                  ============================== -->
             <div id="tab-spark" class="tab-content space-y-8">
                 <div class="mb-6 flex items-start gap-4">
@@ -691,27 +553,11 @@
                             <p class="text-orange-700 leading-relaxed">아무 임시 이미지만 올려두고 얼리버드 선결제 후, 나중에 덮어쓰기 하세요!</p>
                         </div>
                     </div>
-
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                        <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-4 text-lg">
-                            <i data-lucide="image" class="icon-lg text-slate-500"></i> 제출 규격
-                        </h4>
-                        <ul class="space-y-4 text-sm text-slate-600">
-                            <li class="flex justify-between items-center border-b border-slate-100 pb-3">
-                                <span class="text-slate-500">이미지 규격</span> 
-                                <strong class="text-slate-900 bg-slate-100 px-2 py-1 rounded">150 DPI / 3~10장</strong>
-                            </li>
-                            <li class="flex flex-col border-b border-slate-100 pb-3">
-                                <span class="text-slate-500 mb-1">합성컷(Context) 강추!</span> 
-                                <strong class="text-indigo-600 text-sm">제품만 있는 컷보다 배경 합성 컷을 훨씬 좋아합니다.</strong>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
 
             <!-- ==============================
-                 Tab 5: iF Student (유지)
+                 Tab 5: iF Student
                  ============================== -->
             <div id="tab-if" class="tab-content space-y-8">
                 <div class="mb-6 flex items-start gap-4">
@@ -719,104 +565,193 @@
                         <i data-lucide="leaf" class="icon-2xl text-emerald-600"></i>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-2">iF DESIGN STUDENT AWARD 2026</h3>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">iF DESIGN STUDENT AWARD</h3>
                         <p class="text-slate-500 leading-relaxed text-sm md:text-base">학생/졸업생 대상 <strong class="text-emerald-600">참가비 전액 무료!</strong> UN 지속가능발전목표(SDGs)를 해결하는 착한 디자인의 끝판왕 공모전입니다.</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gradient-to-br from-emerald-50 to-green-50 p-6 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex justify-between items-start mb-4">
-                            <h4 class="font-bold text-emerald-800 flex items-center gap-2 text-lg">
-                                <i data-lucide="heart-handshake" class="icon-lg"></i> 평가 핵심: SDGs & 사회적 가치
-                            </h4>
-                            <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full">총상금 5만 유로</span>
-                        </div>
-                        <ul class="space-y-4 text-sm text-emerald-900">
-                            <li class="flex items-start gap-2">
-                                <div class="bg-emerald-200 p-1 mt-0.5 rounded text-emerald-700"><i data-lucide="check" class="icon-sm"></i></div>
-                                <div><strong>문제 해결 (Problem-solving):</strong> 이 디자인이 세상의 진짜 문제를 해결하는가?</div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                        <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-4 text-lg">
-                            <i data-lucide="file-image" class="icon-lg text-slate-500"></i> 제출 포맷 (아주 까다로움)
-                        </h4>
-                        <ul class="space-y-4 text-sm text-slate-600">
-                            <li class="flex justify-between items-center border-b border-slate-100 pb-3">
-                                <span class="text-slate-500">프레젠테이션 포스터</span> 
-                                <strong class="text-indigo-600">PDF 파일 1장 (필수!)</strong>
-                            </li>
-                            <li class="flex justify-between items-center pb-1">
-                                <span class="text-slate-500">영문 설명</span> 
-                                <strong class="text-slate-900">최대 650자(Characters) 이내</strong>
-                            </li>
-                        </ul>
+                <div class="bg-red-50 border border-red-200 p-4 rounded-xl flex items-start gap-3">
+                    <i data-lucide="alert-triangle" class="icon-lg text-red-500 shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="font-bold text-red-700">2026년도 접수 마감 안내</p>
+                        <p class="text-sm text-red-600 mt-1">올해 초(1.28) 마감으로 2026년도 출품은 종료되었습니다. 지금부터 잘 준비해서 <strong>2026년 10월경 열리는 2027년도 어워드</strong>를 선점하세요!</p>
                     </div>
                 </div>
             </div>
 
             <!-- ==============================
-                 Tab 6: 대한민국전람회 (유지)
+                 Tab 6: Asia Design Prize (추가)
                  ============================== -->
-            <div id="tab-national" class="tab-content space-y-8">
+            <div id="tab-asia" class="tab-content space-y-8">
+                <div class="mb-6 flex items-start gap-4">
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 hidden sm:block">
+                        <i data-lucide="globe" class="icon-2xl text-emerald-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">Asia Design Prize 2027</h3>
+                        <p class="text-slate-500 leading-relaxed text-sm md:text-base">아시아 최고 권위의 디자인 상. 글로벌 심사위원단이 평가하며 KDM+ 타지부에서도 수상을 많이 노리는 어워드입니다.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h4 class="font-bold text-emerald-600 flex items-center gap-2 mb-4 text-lg">
+                            <i data-lucide="check-circle-2" class="icon-lg"></i> 특징 및 전략
+                        </h4>
+                        <ul class="space-y-4 text-sm text-slate-700">
+                            <li class="flex items-start gap-3">
+                                <div class="bg-emerald-50 p-1.5 rounded-md text-emerald-600 mt-0.5"><i data-lucide="edit" class="icon-sm"></i></div>
+                                <div><strong>접근성:</strong> 글로벌 공모전 중 규격 및 설명 작성(영문)이 직관적인 편이라 국내 공모전과 병행 제출하기 좋습니다.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="bg-emerald-50 p-1.5 rounded-md text-emerald-600 mt-0.5"><i data-lucide="image" class="icon-sm"></i></div>
+                                <div><strong>시각 자산:</strong> 패널 2~6장(A3 사이즈 권장)으로 작품의 심미성과 문제해결능력을 동시에 어필해야 합니다.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center gap-2">
+                            <i data-lucide="calendar" class="icon-md text-slate-500"></i>
+                            <h4 class="font-bold text-slate-800">2027 시즌 예상 일정 (마감일 기준)</h4>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-slate-600">
+                                <thead class="bg-slate-50/50 border-b border-slate-100">
+                                    <tr>
+                                        <th class="px-6 py-3 font-medium text-slate-500">구분</th>
+                                        <th class="px-6 py-3 font-medium text-slate-500">예상 마감일</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr class="bg-emerald-50/30">
+                                        <td class="px-6 py-4 text-emerald-800 font-bold">얼리버드 마감</td>
+                                        <td class="px-6 py-4 font-bold text-emerald-800">26. 10. 30 경</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 font-medium">일반 접수 마감</td>
+                                        <td class="px-6 py-4">26. 11. 30 경</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 font-medium text-red-500">최종/지각 마감</td>
+                                        <td class="px-6 py-4 text-red-500">26. 12. 30 경</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==============================
+                 Tab 7: 대한민국전람회
+                 ============================== -->
+            <div id="tab-korea" class="tab-content space-y-8">
                 <div class="mb-6 flex items-start gap-4">
                     <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 hidden sm:block">
                         <i data-lucide="trophy" class="icon-2xl text-blue-600"></i>
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold text-slate-900 mb-2">제61회 대한민국 디자인 전람회</h3>
-                        <p class="text-slate-500 leading-relaxed text-sm md:text-base">우리나라에서 국가가 인정하는 최고 권위의 상입니다. 학생들에게는 엄청난 취업 스펙이 됩니다!</p>
+                        <p class="text-slate-500 leading-relaxed text-sm md:text-base">국가 최고 권위, 참가비 무료, 해외 인턴십 혜택. 국내의 메인 스테이지입니다.</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex justify-between items-start mb-4">
-                            <h4 class="font-bold text-blue-800 flex items-center gap-2 text-lg">
-                                <i data-lucide="gift" class="icon-lg"></i> 혜택이 가장 큰 공모전
-                            </h4>
-                            <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">참가비 무료!</span>
-                        </div>
-                        <ul class="space-y-4 text-sm text-blue-900">
-                            <li class="flex items-start gap-2">
-                                <div class="bg-blue-200 p-1 mt-0.5 rounded text-blue-700"><i data-lucide="plane-takeoff" class="icon-sm"></i></div>
-                                <div><strong>해외 인턴 프리패스:</strong> 은상(장관상) 이상 시 KIDP 해외 인턴 지원 서류 면제!</div>
-                            </li>
-                        </ul>
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center gap-2">
+                        <i data-lucide="bell" class="icon-md text-red-500"></i>
+                        <h4 class="font-bold text-slate-800">마감 일정 체크</h4>
                     </div>
-
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                        <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-4 text-lg">
-                            <i data-lucide="edit" class="icon-lg text-slate-500"></i> 준비 방법
-                        </h4>
-                        <ul class="space-y-4 text-sm text-slate-600">
-                            <li class="flex justify-between items-center pb-1">
-                                <span class="text-slate-500">설명글 규격</span> 
-                                <strong class="text-slate-900">국문과 영문 모두 작성 필수</strong>
-                            </li>
-                        </ul>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-600">
+                            <thead class="bg-slate-50/50 border-b border-slate-100">
+                                <tr>
+                                    <th class="px-6 py-3 font-medium text-slate-500">단계</th>
+                                    <th class="px-6 py-3 font-medium text-slate-500 text-red-500">마감일</th>
+                                    <th class="px-6 py-3 font-medium text-slate-500">제출 규격</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="bg-blue-50/30">
+                                    <td class="px-6 py-4 text-blue-800 font-bold">1차 온라인</td>
+                                    <td class="px-6 py-4 font-bold text-blue-800">06. 30 마감</td>
+                                    <td class="px-6 py-4">이미지 최대 5장, 국/영문 설명</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-medium">2차 현물제출</td>
+                                    <td class="px-6 py-4 font-medium text-slate-900">08월 초 마감</td>
+                                    <td class="px-6 py-4">1차 통과자만 A1 폼보드 제출</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
             <!-- ==============================
-                 Tab 7: 강원디자인전람회 (유지)
+                 Tab 8: 타지부 전람회 (추가/통합)
                  ============================== -->
-            <div id="tab-gangwon" class="tab-content space-y-8">
+            <div id="tab-regional" class="tab-content space-y-8">
                 <div class="mb-6 flex items-start gap-4">
                     <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 hidden sm:block">
                         <i data-lucide="map-pin" class="icon-2xl text-purple-600"></i>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-2">강원디자인전람회</h3>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">국내 지역 전람회 (강원/대전/부산)</h3>
                         <p class="text-slate-500 leading-relaxed text-sm md:text-base">
-                            강원디자인진흥원에서 주관하는 알짜배기 국내 공모전! <br>
-                            <span class="text-red-500 font-bold">※ 주의: 2026년 공고가 아직 발표되지 않아, 캘린더 일정은 '작년(2025년) 기준'으로 작성되었습니다.</span>
+                            타지부 학생들도 적극적으로 지원하여 수상 실적을 쌓는 효자 공모전들입니다. 대한민국 전람회용 포트폴리오를 활용하세요! <br>
+                            <span class="text-red-500 font-bold text-xs">※ 공고 전이므로, 작년(2025년) 기준 예상 마감일입니다.</span>
                         </p>
                     </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    
+                    <!-- 강원디자인전람회 -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded text-xs">강원도</span>
+                                <h4 class="font-bold text-slate-900">강원디자인전람회</h4>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">참가비 무료, 전 분야 출품 가능. 1차 온라인 폼 입력 후 합격자만 2차 패널 제출.</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-xl border border-purple-100">
+                            <p class="text-xs text-slate-500 mb-1">1차 예상 마감일</p>
+                            <p class="font-bold text-purple-800">8월 29일 경</p>
+                        </div>
+                    </div>
+
+                    <!-- 대전디자인공모전 -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-pink-100 text-pink-700 font-bold px-2 py-1 rounded text-xs">대전/충청</span>
+                                <h4 class="font-bold text-slate-900">대전디자인공모전</h4>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">대디전(대한민국전람회) 일정 직후 오픈하여 탈락작 구제 및 실적 쌓기 최적의 공모전.</p>
+                        </div>
+                        <div class="bg-pink-50 p-3 rounded-xl border border-pink-100">
+                            <p class="text-xs text-slate-500 mb-1">예상 마감일</p>
+                            <p class="font-bold text-pink-800">10월 초 (10.10 경)</p>
+                        </div>
+                    </div>
+
+                    <!-- 부산산업디자인전람회 -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-sky-100 text-sky-700 font-bold px-2 py-1 rounded text-xs">부산/경남</span>
+                                <h4 class="font-bold text-slate-900">부산산업디자인전</h4>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4">전국 최대 규모 지역 전람회. 시각/제품/환경 분야 경쟁이 치열하며 포트폴리오 가치 큼.</p>
+                        </div>
+                        <div class="bg-sky-50 p-3 rounded-xl border border-sky-100">
+                            <p class="text-xs text-slate-500 mb-1">예상 마감일</p>
+                            <p class="font-bold text-sky-800">10월 중순 경</p>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
 
@@ -824,10 +759,8 @@
     </main>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Main Tab Switching Logic
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.remove('active');
@@ -845,17 +778,13 @@
             });
         }
 
-        // Schedule View Toggle Logic (List vs Calendar)
         function toggleScheduleView(viewType) {
-            // Hide all schedule views
             document.querySelectorAll('.schedule-view').forEach(el => {
                 el.classList.remove('active');
             });
             
-            // Show selected view
             document.getElementById('view-' + viewType).classList.add('active');
 
-            // Update button styles
             const btnList = document.getElementById('btn-view-list');
             const btnCal = document.getElementById('btn-view-cal');
 
